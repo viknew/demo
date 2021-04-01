@@ -1,15 +1,12 @@
 package com.example.niochart;
 
 import java.io.IOException;
-import java.io.Writer;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectableChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Set;
@@ -17,9 +14,6 @@ import java.util.Set;
 /**
  * @author Administrator
  * @描述:
- * @公司: 哈工大业信息技术股份有限公司
- * @创建日期: 2021-03-30
- * @创建时间: 23:00
  */
 public class NIOChartClient
 {
@@ -63,7 +57,7 @@ public class NIOChartClient
                 while (true){
                     int select = selector.select();
                     if(select != 0){
-                        Set<SelectionKey> keys = selector.keys();
+                        Set<SelectionKey> keys = selector.selectedKeys();
                         Iterator<SelectionKey> iterator = keys.iterator();
                         while (iterator.hasNext()){
                             SelectionKey key = iterator.next();

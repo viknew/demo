@@ -1,11 +1,12 @@
 package com.example.niochart;
 
-import io.netty.channel.Channel;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.*;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -14,9 +15,6 @@ import java.util.Set;
 /**
  * @author Administrator
  * @描述:
- * @公司: 哈工大业信息技术股份有限公司
- * @创建日期: 2021-03-29
- * @创建时间: 23:29
  */
 public class NIOChartServer
 {
@@ -32,9 +30,10 @@ public class NIOChartServer
     public NIOChartServer(int port)
     {
         this.port = port;
-        try (ServerSocketChannel serverSocketChannel = ServerSocketChannel.open())
+        try
         {
-            serverSocketChannel.bind(new InetSocketAddress("localhost",port));
+            ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();
+            serverSocketChannel.bind(new InetSocketAddress(this.port));
             serverSocketChannel.configureBlocking(false);
             selector = Selector.open();
             serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT);
@@ -93,7 +92,7 @@ public class NIOChartServer
             ByteBuffer byteBuffer = ByteBuffer.allocate(1024);
             StringBuilder stringBuilder = new StringBuilder();
             try{
-                while (client.read(byteBuffer) != -1){
+                while (client.read(byteBuffer) != 0){
                     byteBuffer.flip();
                     stringBuilder.append(charset.decode(byteBuffer));
                 }
